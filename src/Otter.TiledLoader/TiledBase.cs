@@ -17,21 +17,17 @@ namespace Otter.TiledLoader
         protected void LoadProperties(XmlNode xmlElement)
         {
             var properties = xmlElement["properties"];
-            if(properties != null)
+
+            if (properties == null)
             {
-                var children = xmlElement.ChildNodes;
-                foreach(XmlNode child in children)
+                return;
+            }
+
+            foreach (XmlNode child in properties.ChildNodes)
+            {
+                if (child.Name == "property" && child.Attributes != null && child.Attributes.Count > 0)
                 {
-                    if(child.Name == "properties")
-                    {
-                        var attributes = child.Attributes;
-                        if(attributes != null && attributes.Count > 0)
-                        {
-                            var name = attributes["name"].Value;
-                            var value = attributes["value"].Value;
-                            Properties.Add(name, value);
-                        }
-                    }
+                    Properties.Add(child.Attributes["name"].Value, child.Attributes["value"].Value);
                 }
             }
         }
